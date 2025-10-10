@@ -1,0 +1,185 @@
+/* --- Estilos Gerais do Header --- */
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 5%;
+    background-color: #1a1a1a;
+    color: white;
+    height: 140px;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+.imagem-logo{
+    height: 200px; /* Ajustado para caber melhor na altura do header */
+    width: auto;   /* Largura automática para manter proporção */
+    border-radius: 10px;
+    display: block; /* Remove espaço extra abaixo da imagem */
+}
+
+/* --- Estilo da Logo --- */
+.logo a {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white;
+    text-decoration: none;
+}
+
+/* --- Agrupador Direito (Nav, Ações, Hamburger) --- */
+.header-direita {
+    display: flex;
+    align-items: center;
+    gap: 30px; /* Espaço entre nav, carrinho e hamburger */
+}
+
+/* --- Estilos da Navegação (Desktop) --- */
+.nav-menu ul {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 30px;
+}
+.nav-menu a {
+    color: #ccc;
+    text-decoration: none;
+    font-size: 1.4rem;
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+}
+.nav-menu a:hover {
+    color: white;
+    background-color: #333;
+}
+.nav-menu a.active {
+    color: #fff;
+    font-weight: bold;
+    border-bottom: 2px solid #675d00;
+}
+
+/* --- Estilos do Carrinho --- */
+.header-actions {
+    position: relative; /* Para o posicionamento do badge */
+}
+.cart-link {
+    color: #fff;
+    font-size: 1.8rem; /* Tamanho do ícone */
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    transition: color 0.3s;
+}
+.cart-link:hover {
+    color: #ccc;
+}
+/* Opcional: Badge de notificação do carrinho */
+.cart-badge {
+    position: absolute;
+    top: -5px;
+    right: -10px;
+    background-color: #e63946; /* Cor de destaque */
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 0.8rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+}
+
+
+/* --- Botão Hamburger (Escondido no Desktop) --- */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 30px;
+    height: 25px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 10;
+}
+.hamburger .bar {
+    height: 3px;
+    width: 100%;
+    background-color: white;
+    border-radius: 10px;
+    transition: all 0.3s ease-in-out;
+}
+
+
+/* --- Lógica Responsiva para Mobile (telas com até 768px de largura) --- */
+@media (max-width: 768px) {
+    /* Esconde o menu de navegação principal */
+    .nav-menu {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        height: 100vh;
+        width: 250px;
+        background-color: #1c1c1c;
+        box-shadow: -5px 0 15px rgba(0, 0, 0, 0.2);
+        transition: right 0.4s ease-in-out;
+        padding-top: 80px;
+    }
+    .nav-menu.ativo {
+        right: 0;
+    }
+    .nav-menu ul {
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        gap: 20px;
+    }
+    .nav-menu li {
+        width: 80%;
+        text-align: center;
+    }
+    .nav-menu a {
+        font-size: 1.2rem;
+        display: block;
+        width: 100%;
+    }
+
+    /* Mostra o botão Hamburger */
+    .hamburger {
+        display: flex;
+    }
+    .hamburger.ativo .bar:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 6px);
+    }
+    .hamburger.ativo .bar:nth-child(2) {
+        opacity: 0;
+    }
+    .hamburger.ativo .bar:nth-child(3) {
+        transform: rotate(-45deg) translate(5px, -6px);
+    }
+
+    .header-container{
+        height: 70px;
+        padding: 0 4%;
+    }
+
+    body{
+        padding-top: 70px; /* Ajusta o padding-top do body para a nova altura do header */
+    }
+    .imagem-logo{
+        height: 120px; /* Reduz a logo no mobile */
+        padding-top: 5px;
+    }
+    .cart-link {
+        font-size: 1.6rem; /* Ajusta o tamanho do ícone no mobile */
+    }
+    .header-direita {
+        gap: 20px; /* Reduz o espaço no mobile */
+    }
+}
