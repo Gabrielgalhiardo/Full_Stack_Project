@@ -1,30 +1,10 @@
 // src/screens/perfil/Perfil.js
 import React, { useState, useEffect } from 'react';
 import './Perfil.css';
-import { FaPlus, FaCog, FaEdit, FaTrash } from 'react-icons/fa';
-import Box from '@mui/material/Box'; // MUDANÇA: Importando o Box para o grid
-
-// Componente de Card de Produto para o Perfil (com botões de editar/deletar)
-function ProfileProductCard({ product, onEdit, onDelete }) {
-    return (
-        <div className="produto-card-perfil">
-            <img src={product.imageUrl} alt={product.title} className="produto-imagem-perfil" />
-            <div className="produto-card-body-perfil">
-                <h3 className="produto-titulo-perfil">{product.title}</h3>
-                <p className="produto-preco-perfil">R$ {product.price.toFixed(2).replace('.', ',')}</p>
-                <p className="produto-descricao-perfil">{product.description}</p>
-                <div className="produto-card-actions-perfil">
-                    <button onClick={() => onEdit(product)} className="produto-action-btn edit-btn">
-                        <FaEdit /> Editar
-                    </button>
-                    <button onClick={() => onDelete(product)} className="produto-action-btn delete-btn">
-                        <FaTrash /> Deletar
-                    </button>
-                </div>
-            </div>
-        </div>
-    );
-}
+import { FaPlus, FaCog } from 'react-icons/fa';
+import { api } from '../../services/api';
+import ProfileProductCard from '../../components/ProfileProductCard';
+import ProductForm from '../../components/ProductForm';
 
 
 function Perfil() {
@@ -46,11 +26,8 @@ function Perfil() {
         // Simulação de busca de usuário
         setUser({ name: 'Gabriel', email: 'gabriel.dev@email.com', avatar: `https://i.pravatar.cc/150?u=gabriel` });
 
-        fetch(`http://localhost:8080/products/active`) // <<< AJUSTE ESTA URL
-            .then(response => {
-                if (!response.ok) throw new Error('Não foi possível buscar seus produtos.');
-                return response.json();
-            })
+        // Busca os produtos do colaborador autenticado
+        api.get('/api/products/my-products')
             .then(data => {
                 setProducts(data);
             })
@@ -64,7 +41,7 @@ function Perfil() {
     }, []);
 
 
-    // --- FUNÇÕES DE MANIPULAÇÃO DOS MODAIS (permanecem as mesmas) ---
+    // --- FUNÇÕES DE MANIPULAÇÃO DOS MODAIS ---
     const handleOpenAddModal = () => {
         setIsEditing(false);
         setSelectedProduct(null);
@@ -93,53 +70,155 @@ function Perfil() {
         setSelectedProduct(null);
     };
 
-    // --- FUNÇÕES DE LÓGICA (CRUD - precisam ser implementadas com a API) ---
-    const handleProductSubmit = (e) => { e.preventDefault(); handleCloseModals(); };
-    const handleDeleteConfirm = () => { handleCloseModals(); };
+    // --- FUNÇÕES DE LÓGICA (CRUD) ---
+    const handleProductSubmit = async (formData) => { 
+        // Converte o preço corretamente (substitui vírgula por ponto se necessário)
+        const priceValue = typeof formData.price === 'string' 
+            ? parseFloat(formData.price.replace(',', '.')) 
+            : parseFloat(formData.price);
+        
+        // Verifica se imageUrl é base64 (muito grande para o banco)
+        let imageUrl = formData.imageUrl;
+        if (imageUrl && imageUrl.startsWith('data:image')) {
+            console.warn('⚠️ Imagem base64 detectada. Base64 é muito grande para o banco de dados.');
+            console.warn('💡 Por favor, use uma URL de imagem válida.');
+            // Não permite enviar base64
+            setError('Por favor, insira uma URL de imagem válida. Base64 não é suportado.');
+            return;
+        }
+        
+        const productData = {
+            title: formData.title,
+            description: formData.description,
+            price: priceValue,
+            quantity: parseInt(formData.quantity),
+            imageUrl: imageUrl,
+            productStatus: formData.productStatus,
+            productCategory: formData.productCategory
+        };
+
+        // Log do produto antes de enviar
+        console.log('📋 Produto a ser enviado:', JSON.stringify(productData, null, 2));
+        console.log('🔍 Tipo de operação:', isEditing ? 'EDITAR' : 'CRIAR');
+        console.log('💰 Preço convertido:', priceValue, '(tipo:', typeof priceValue, ')');
+        console.log('📊 Quantidade convertida:', parseInt(formData.quantity), '(tipo:', typeof parseInt(formData.quantity), ')');
+
+        try {
+            if (isEditing) {
+                // Atualizar produto existente - PUT /api/products/{id}
+                console.log('✏️ Atualizando produto ID:', selectedProduct.id);
+                const response = await api.put(`/api/products/${selectedProduct.id}`, productData);
+                console.log('✅ Produto atualizado com sucesso:', response);
+            } else {
+                // Criar novo produto - POST /api/products
+                console.log('➕ Criando novo produto...');
+                const response = await api.post('/api/products', productData);
+                console.log('✅ Produto criado com sucesso:', response);
+            }
+            
+            // Recarregar lista de produtos - GET /api/products/my-products
+            const data = await api.get('/api/products/my-products');
+            setProducts(data);
+            
+            handleCloseModals();
+        } catch (err) {
+            console.error("❌ Erro ao salvar produto:", err);
+            console.error("📝 Detalhes do erro:", err.response?.data || err.message);
+            setError(err.message || 'Erro ao salvar produto');
+        }
+    };
+
+    const handleDeleteConfirm = async () => {
+        try {
+            // Deletar produto - DELETE /api/products/{id}
+            await api.delete(`/api/products/${selectedProduct.id}`);
+            
+            // Recarregar lista de produtos
+            const data = await api.get('/api/products/my-products');
+            setProducts(data);
+            
+            handleCloseModals();
+        } catch (err) {
+            console.error("Erro ao deletar produto:", err);
+            setError(err.message || 'Erro ao deletar produto');
+        }
+    };
     const handleSettingsSubmit = (e) => { e.preventDefault(); handleCloseModals(); };
     
 
-    if (loading) return <p style={{ textAlign: 'center', marginTop: '50px' }}>Carregando perfil...</p>;
-    if (error) return <p style={{ textAlign: 'center', marginTop: '50px', color: 'red' }}>Erro: {error}</p>;
-
+    if (loading) {
+        return (
+            <div className="perfil-container">
+                <div className="loading-container">
+                    <div className="loading-spinner"></div>
+                    <p>Carregando perfil...</p>
+                </div>
+            </div>
+        );
+    }
+    
+    if (error) {
+        return (
+            <div className="perfil-container">
+                <div className="error-container">
+                    <p className="error-message">Erro: {error}</p>
+                    <button className="retry-button" onClick={() => window.location.reload()}>
+                        Tentar Novamente
+                    </button>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="perfil-container">
             <header className="perfil-header">
                 <div className="perfil-info">
-                    <img src={user.avatar} alt="Avatar" className="perfil-avatar" />
                     <div className="perfil-texto">
-                        <h1>{user.name}</h1>
-                        <p>{user.email}</p>
+                        <h1 className="perfil-nome">{user.name}</h1>
+                        <p className="perfil-email">{user.email}</p>
                     </div>
+                    <span className="perfil-badge">Colaborador</span>
                 </div>
                 <div className="perfil-actions">
-                    <button className="action-button" onClick={handleOpenAddModal}><FaPlus /> Adicionar Produto</button>
-                    <button className="action-button secondary" onClick={handleOpenSettingsModal}><FaCog /> Configurações</button>
+                    <button className="action-button primary" onClick={handleOpenAddModal}>
+                        <FaPlus /> Adicionar Produto
+                    </button>
+                    <button className="action-button secondary" onClick={handleOpenSettingsModal}>
+                        <FaCog /> Configurações
+                    </button>
                 </div>
             </header>
 
             <main className="perfil-main-content">
-                <h2>Meus Produtos Cadastrados</h2>
-                {/* MUDANÇA: Usando o Box e o novo Card */}
-                <Box sx={{
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))',
-                    gap: '24px',
-                }}>
-                    {products.length > 0 ? (
-                        products.map(product => (
+                <div className="section-header">
+                    <h2>Meus Produtos</h2>
+                    <span className="product-count">{products.length} {products.length === 1 ? 'produto' : 'produtos'}</span>
+                </div>
+                
+                {products.length > 0 ? (
+                    <div className="products-grid">
+                        {products.map(product => (
                             <ProfileProductCard
                                 key={product.id}
                                 product={product}
                                 onEdit={handleOpenEditModal}
                                 onDelete={handleOpenDeleteModal}
                             />
-                        ))
-                    ) : (
-                        <p className="sem-produtos">Você ainda não cadastrou nenhum produto.</p>
-                    )}
-                </Box>
+                        ))}
+                    </div>
+                ) : (
+                    <div className="empty-state">
+                        <div className="empty-icon">
+                            <FaPlus />
+                        </div>
+                        <h3>Nenhum produto cadastrado</h3>
+                        <p>Comece adicionando seu primeiro produto!</p>
+                        <button className="action-button primary" onClick={handleOpenAddModal}>
+                            <FaPlus /> Adicionar Primeiro Produto
+                        </button>
+                    </div>
+                )}
             </main>
 
             {/* --- SEÇÃO DE MODAIS COM SUAS CLASSES CSS --- */}
@@ -149,20 +228,14 @@ function Perfil() {
                     
                     {/* MODAL 1: Adicionar/Editar Produto */}
                     {isAddEditModalOpen && (
-                        // MUDANÇA: Usando sua classe .modal-detalhes
                         <div className="modal-detalhes" onClick={(e) => e.stopPropagation()}>
-                            <h2>{isEditing ? 'Editar Produto' : 'Adicionar Novo Produto'}</h2>
-                            <form onSubmit={handleProductSubmit} className='modal-form'>
-                                {/* Campos do formulário */}
-                                <input type="text" placeholder="Nome" defaultValue={isEditing ? selectedProduct.title : ''} required />
-                                <textarea placeholder="Descrição" defaultValue={isEditing ? selectedProduct.description : ''} required></textarea>
-                                <input type="number" placeholder="Preço" defaultValue={isEditing ? selectedProduct.price : ''} required />
-                                <input type="text" placeholder="URL da Imagem" defaultValue={isEditing ? selectedProduct.imageUrl : ''} required />
-                                <div className="modal-actions">
-                                    <button type="button" className="btn-cancel" onClick={handleCloseModals}>Cancelar</button>
-                                    <button type="submit" className="btn-confirm">{isEditing ? 'Salvar' : 'Adicionar'}</button>
-                                </div>
-                            </form>
+                            <h2>{isEditing ? 'Editar Produto' : 'Publicar Produto'}</h2>
+                            <ProductForm
+                                product={selectedProduct}
+                                isEditing={isEditing}
+                                onSubmit={handleProductSubmit}
+                                onCancel={handleCloseModals}
+                            />
                         </div>
                     )}
 

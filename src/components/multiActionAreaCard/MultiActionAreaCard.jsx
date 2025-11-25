@@ -55,16 +55,30 @@ export default function MultiActionAreaCard(props) {
                 {/* MODAL 1: Detalhes do Produto */}
                 {openModalDetalhes && (
                     <Portal>
-                        {/* ✅ PASSO 2: Troque a prop 'sx' por 'className' */}
                         <Box className="modal-detalhes">
                             <Typography variant="h4" component="h2">{props.product.title}</Typography>
-                            {/* ✅ PASSO 3: Troque a prop 'style' por 'className' na imagem */}
                             <img src={props.product.imageUrl} alt={props.product.title} className="modal-detalhes-imagem" />
                             <Typography sx={{ mt: 2 }}>{props.product.description}</Typography>
-                            <Typography variant="h5" sx={{ mt: 3 }}>
-                                Preço: R$ {props.product.price.toFixed(2).replace('.', ',')}
-                            </Typography>
-                            <Button variant="contained" sx={{ mt: 2 }} onClick={handleFecharModais}>Fechar</Button>
+                            
+                            <Box sx={{ mt: 3, display: 'flex', flexDirection: 'column', gap: 2 }}>
+                                <Typography variant="h5">
+                                    Preço: R$ {props.product.price.toFixed(2).replace('.', ',')}
+                                </Typography>
+                                
+                                {props.product.collaboratorName && (
+                                    <Typography variant="body1" sx={{ color: '#b5b5b5' }}>
+                                        <strong>Vendedor:</strong> {props.product.collaboratorName}
+                                    </Typography>
+                                )}
+                                
+                                {props.product.quantity !== undefined && (
+                                    <Typography variant="body1" sx={{ color: '#b5b5b5' }}>
+                                        <strong>Unidades disponíveis:</strong> {props.product.quantity}
+                                    </Typography>
+                                )}
+                            </Box>
+                            
+                            <Button variant="contained" sx={{ mt: 3 }} onClick={handleFecharModais}>Fechar</Button>
                         </Box>
                     </Portal>
                 )}

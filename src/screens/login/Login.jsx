@@ -1,31 +1,108 @@
 // src/screens/login/Login.js
 
-import { Link } from 'react-router-dom'; // 1. IMPORTE O LINK AQUI
+import { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import './Login.css';
+import { api } from '../../services/api';
+import { saveToken, isAuthenticated } from '../../services/authService';
 
 function Login() {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
+    const navigate = useNavigate();
+
+    // Redireciona para /home se já estiver autenticado
+    useEffect(() => {
+        if (isAuthenticated()) {
+            navigate('/home', { replace: true });
+        }
+    }, [navigate]);
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setError('');
+        setLoading(true);
+
+        try {
+            // Faz a requisição para o endpoint de login
+            const response = await api.post('/auth/login', {
+                email: email,
+                password: password
+            });
+
+            // Salva o token JWT recebido (suporta diferentes formatos de resposta)
+            const token = response.token || response.accessToken || response.access_token || response;
+            
+            if (token && typeof token === 'string') {
+                saveToken(token);
+                // Redireciona para a página home após login bem-sucedido
+                navigate('/home');
+            } else {
+                setError('Token não recebido do servidor.');
+            }
+        } catch (err) {
+            setError(err.message || 'Erro ao fazer login. Verifique suas credenciais.');
+            console.error('Erro no login:', err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
         <div className="login-container">
             <h2>Login</h2>
 
-            <div className='input-group'>
-                <label htmlFor="username">Usuário</label>
-                <input type="text" id="username" placeholder="Usuário" />
-            </div>
+            {error && (
+                <div style={{ 
+                    color: 'red', 
+                    marginBottom: '15px', 
+                    padding: '10px', 
+                    backgroundColor: '#ffebee', 
+                    borderRadius: '5px',
+                    textAlign: 'center'
+                }}>
+                    {error}
+                </div>
+            )}
 
-            <div className='input-group'>
-                <label htmlFor="password">Senha</label>
-                <input type="password" id="password" placeholder="Senha" />
-            </div>
+            <form onSubmit={handleSubmit}>
+                <div className='input-group'>
+                    <label htmlFor="email">Email</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        placeholder="seu.email@exemplo.com"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                        disabled={loading}
+                    />
+                </div>
 
-            <button
-                className="login-button"
-                type='submit'
-            >
-                Entrar
-            </button>
+                <div className='input-group'>
+                    <label htmlFor="password">Senha</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        placeholder="Senha"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                        disabled={loading}
+                    />
+                </div>
 
-            {/* 2. ADICIONE ESTE TRECHO ABAIXO */}
+                <button
+                    className="login-button"
+                    type='submit'
+                    disabled={loading}
+                >
+                    {loading ? 'Entrando...' : 'Entrar'}
+                </button>
+            </form>
+
             <p className="register-link">
                 Não tem uma conta? <Link to="/cadastro">Cadastre-se</Link>
             </p>

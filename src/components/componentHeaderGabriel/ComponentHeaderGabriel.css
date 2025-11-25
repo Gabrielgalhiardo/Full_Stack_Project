@@ -65,6 +65,9 @@
 /* --- Estilos do Carrinho --- */
 .header-actions {
     position: relative; /* Para o posicionamento do badge */
+    display: flex;
+    align-items: center;
+    gap: 15px;
 }
 .cart-link {
     color: #fff;
@@ -76,6 +79,21 @@
 }
 .cart-link:hover {
     color: #ccc;
+}
+/* Estilos do botão de logout */
+.logout-button {
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 1.8rem;
+    cursor: pointer;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    transition: color 0.3s;
+}
+.logout-button:hover {
+    color: #e63946;
 }
 /* Opcional: Badge de notificação do carrinho */
 .cart-badge {

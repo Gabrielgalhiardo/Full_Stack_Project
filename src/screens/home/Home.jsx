@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ResponsiveGrid from '../../responsiveGrid/ResponsiveGrid';
+import { api } from '../../services/api';
 
 function Home() {
     const [products, setProducts] = useState([]);
@@ -7,13 +8,7 @@ function Home() {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        fetch('http://localhost:8080/products/active')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Não foi possível buscar os produtos.');
-                }
-                return response.json();
-            })
+        api.get('/api/products')
             .then(data => {
                 setProducts(data);
             })
