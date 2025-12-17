@@ -11,11 +11,11 @@
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 1000;
+    z-index: 10000;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 .imagem-logo{
-    height: 200px; /* Ajustado para caber melhor na altura do header */
+    height: 100px; /* Ajustado para caber melhor na altura do header */
     width: auto;   /* Largura automática para manter proporção */
     border-radius: 10px;
     display: block; /* Remove espaço extra abaixo da imagem */
@@ -37,6 +37,11 @@
 }
 
 /* --- Estilos da Navegação (Desktop) --- */
+.nav-menu {
+    position: relative;
+    z-index: 1;
+}
+
 .nav-menu ul {
     display: flex;
     list-style: none;
@@ -64,17 +69,53 @@
 
 /* --- Estilos do Carrinho --- */
 .header-actions {
-    position: relative; /* Para o posicionamento do badge */
+
     display: flex;
+    flex-direction: row;
     align-items: center;
     gap: 15px;
+
+    position: relative;
+    z-index: 100;
+    background-color: rgba(26, 26, 26, 0.95);
+    padding: 5px 16px;
+    border-radius: 12px;
+    box-sizing: border-box;
+    height: auto;
+    line-height: 1.4rem;
+    
+}
+
+/* Botão de fechar o menu no header (escondido no desktop) */
+.header-menu-close {
+    display: none;
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 5px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    transition: all 0.3s ease;
+}
+
+.header-menu-close:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #f0e000;
+    transform: rotate(90deg);
 }
 .cart-link {
+    position: relative; /* Para o posicionamento do badge */
     color: #fff;
     font-size: 1.8rem; /* Tamanho do ícone */
     text-decoration: none;
     display: flex;
     align-items: center;
+    justify-content: center;
     transition: color 0.3s;
 }
 .cart-link:hover {
@@ -95,21 +136,24 @@
 .logout-button:hover {
     color: #e63946;
 }
-/* Opcional: Badge de notificação do carrinho */
+/* Badge de notificação do carrinho */
 .cart-badge {
     position: absolute;
-    top: -5px;
-    right: -10px;
+    top: -8px;
+    right: -8px;
     background-color: #e63946; /* Cor de destaque */
     color: white;
     border-radius: 50%;
-    width: 20px;
+    min-width: 20px;
     height: 20px;
-    font-size: 0.8rem;
+    padding: 0 4px;
+    font-size: 0.75rem;
     display: flex;
     justify-content: center;
     align-items: center;
     font-weight: bold;
+    line-height: 1;
+    box-sizing: border-box;
 }
 
 
@@ -135,6 +179,105 @@
 }
 
 
+/* --- Responsividade para Tablets Grandes (até 1200px) --- */
+@media (max-width: 1200px) {
+    .header-container {
+        padding: 0 3%;
+        height: 120px;
+    }
+
+    .imagem-logo {
+        height: 90px;
+    }
+
+    .nav-menu ul {
+        gap: 25px;
+    }
+
+    .nav-menu a {
+        font-size: 1.3rem;
+        padding: 4px 8px;
+    }
+
+    .cart-link {
+        font-size: 1.7rem;
+    }
+
+    .logout-button {
+        font-size: 1.7rem;
+    }
+
+    body {
+        padding-top: 120px;
+    }
+}
+
+/* --- Responsividade para Tablets (até 1024px) --- */
+@media (max-width: 1024px) {
+    .header-container {
+        padding: 0 3%;
+        height: 110px;
+    }
+
+    .imagem-logo {
+        height: 85px;
+    }
+
+    .nav-menu ul {
+        gap: 20px;
+    }
+
+    .nav-menu a {
+        font-size: 1.2rem;
+        padding: 4px 8px;
+    }
+
+    .cart-link {
+        font-size: 1.6rem;
+    }
+
+    .logout-button {
+        font-size: 1.6rem;
+    }
+
+    body {
+        padding-top: 110px;
+    }
+}
+
+/* --- Responsividade para Tablets Pequenos (até 900px) --- */
+@media (max-width: 900px) {
+    .header-container {
+        height: 100px;
+        padding: 0 3%;
+    }
+
+    body {
+        padding-top: 100px;
+    }
+
+    .imagem-logo {
+        height: 75px;
+    }
+
+    .nav-menu ul {
+        gap: 18px;
+    }
+
+    .nav-menu a {
+        font-size: 1.15rem;
+        padding: 4px 8px;
+    }
+
+    .cart-link {
+        font-size: 1.5rem;
+    }
+
+    .logout-button {
+        font-size: 1.5rem;
+    }
+}
+
 /* --- Lógica Responsiva para Mobile (telas com até 768px de largura) --- */
 @media (max-width: 768px) {
     /* Esconde o menu de navegação principal */
@@ -143,29 +286,61 @@
         top: 0;
         right: -100%;
         height: 100vh;
-        width: 250px;
+        width: 280px;
+        max-width: 85vw;
         background-color: #1c1c1c;
         box-shadow: -5px 0 15px rgba(0, 0, 0, 0.2);
         transition: right 0.4s ease-in-out;
         padding-top: 80px;
+        padding-bottom: 20px;
+        z-index: 998;
+        overflow-y: auto;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+        /* Esconde a barra de scroll */
+        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none; /* IE e Edge */
+    }
+    /* Esconde a barra de scroll no Chrome, Safari e Opera */
+    .nav-menu::-webkit-scrollbar {
+        display: none;
     }
     .nav-menu.ativo {
         right: 0;
     }
+
+    /* Mostra o botão de fechar no header quando o menu estiver aberto */
+    .header-menu-close {
+        display: flex;
+    }
+
     .nav-menu ul {
         flex-direction: column;
         align-items: center;
         width: 100%;
         gap: 20px;
+        padding: 0 10px;
     }
     .nav-menu li {
-        width: 80%;
+        width: 90%;
         text-align: center;
     }
     .nav-menu a {
-        font-size: 1.2rem;
+        font-size: 1.1rem;
         display: block;
         width: 100%;
+        padding: 12px;
+        border-radius: 8px;
+    }
+
+    /* Mantém o header-actions visível mesmo com menu aberto */
+    .header-actions {
+        position: relative;
+        z-index: 1001;
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center;
+        gap: 12px;
     }
 
     /* Mostra o botão Hamburger */
@@ -182,22 +357,160 @@
         transform: rotate(-45deg) translate(5px, -6px);
     }
 
-    .header-container{
+    .header-container {
         height: 70px;
-        padding: 0 4%;
+        padding: 0 3%;
     }
 
-    body{
-        padding-top: 70px; /* Ajusta o padding-top do body para a nova altura do header */
+    body {
+        padding-top: 70px;
     }
-    .imagem-logo{
-        height: 120px; /* Reduz a logo no mobile */
+
+    .imagem-logo {
+        height: 50px;
         padding-top: 5px;
     }
+
     .cart-link {
-        font-size: 1.6rem; /* Ajusta o tamanho do ícone no mobile */
+        font-size: 1.5rem;
     }
+
+    .logout-button {
+        font-size: 1.5rem;
+    }
+
     .header-direita {
-        gap: 20px; /* Reduz o espaço no mobile */
+        gap: 15px;
+        flex-direction: row;
+    }
+
+    .cart-badge {
+        top: -6px;
+        right: -6px;
+        min-width: 18px;
+        height: 18px;
+        font-size: 0.7rem;
+    }
+}
+
+/* --- Responsividade para Mobile Pequeno (até 480px) --- */
+@media (max-width: 480px) {
+    .header-container {
+        height: 60px;
+        padding: 0 2%;
+    }
+
+    body {
+        padding-top: 60px;
+    }
+
+    .imagem-logo {
+        height: 40px;
+        padding-top: 3px;
+    }
+
+    .nav-menu {
+        width: 260px;
+        max-width: 90vw;
+        padding-top: 70px;
+        padding-bottom: 20px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+    .nav-menu::-webkit-scrollbar {
+        display: none;
+    }
+
+    .nav-menu ul {
+        gap: 15px;
+        padding: 0 8px;
+    }
+
+    .nav-menu a {
+        font-size: 1rem;
+        padding: 10px;
+    }
+
+    .cart-link {
+        font-size: 1.3rem;
+    }
+
+    .logout-button {
+        font-size: 1.3rem;
+    }
+
+    .header-actions {
+        gap: 10px;
+    }
+
+    .header-direita {
+        gap: 10px;
+    }
+
+    .cart-badge {
+        top: -5px;
+        right: -5px;
+        min-width: 16px;
+        height: 16px;
+        font-size: 0.65rem;
+    }
+
+    .hamburger {
+        width: 25px;
+        height: 20px;
+    }
+}
+
+/* --- Responsividade para Mobile Muito Pequeno (até 360px) --- */
+@media (max-width: 360px) {
+    .header-container {
+        padding: 0 1.5%;
+        height: 55px;
+    }
+
+    body {
+        padding-top: 55px;
+    }
+
+    .imagem-logo {
+        height: 35px;
+    }
+
+    .nav-menu {
+        width: 240px;
+        max-width: 95vw;
+        padding-top: 65px;
+        padding-bottom: 20px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+    .nav-menu::-webkit-scrollbar {
+        display: none;
+    }
+
+    .nav-menu a {
+        font-size: 0.95rem;
+        padding: 8px;
+    }
+
+    .cart-link {
+        font-size: 1.2rem;
+    }
+
+    .logout-button {
+        font-size: 1.2rem;
+    }
+
+    .header-actions {
+        gap: 8px;
+    }
+
+    .hamburger {
+        width: 22px;
+        height: 18px;
     }
 }

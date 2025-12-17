@@ -1,0 +1,341 @@
+/* src/screens/pedidos/Pedidos.css */
+
+.pedidos-container {
+    width: 100%;
+    background: linear-gradient(135deg, #0f1114 0%, #1a1d21 50%, #0f1114 100%);
+    min-height: calc(100vh - 140px);
+    padding: 2rem 5%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.pedidos-content {
+    width: 100%;
+    max-width: 1200px;
+}
+
+.pedidos-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.pedidos-title {
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: #f0e000;
+    margin: 0;
+}
+
+.pedidos-count {
+    padding: 0.5rem 1rem;
+    background: rgba(240, 224, 0, 0.15);
+    color: #f0e000;
+    border: 1px solid rgba(240, 224, 0, 0.3);
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.pedidos-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.pedido-card {
+    background: linear-gradient(135deg, #1e2125 0%, #25282d 100%);
+    border-radius: 16px;
+    padding: 2rem;
+    border: 1px solid rgba(240, 224, 0, 0.2);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.pedido-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(240, 224, 0, 0.2);
+    border-color: rgba(240, 224, 0, 0.4);
+}
+
+.pedido-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(240, 224, 0, 0.2);
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.pedido-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    flex: 1;
+}
+
+.pedido-id {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #f5f5f5;
+}
+
+.pedido-date {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.95rem;
+    color: #c8c8c8;
+}
+
+.pedido-status-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    background: rgba(240, 224, 0, 0.1);
+    border: 1px solid currentColor;
+}
+
+.status-icon {
+    font-size: 1rem;
+}
+
+.status-completed {
+    color: #4caf50;
+}
+
+.status-pending {
+    color: #f0e000;
+}
+
+.status-cancelled {
+    color: #f44336;
+}
+
+.pedido-items {
+    margin-bottom: 1.5rem;
+}
+
+.pedido-items-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #e8e8e8;
+    margin: 0 0 1rem 0;
+}
+
+.pedido-items-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.pedido-item {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+    background: rgba(15, 17, 20, 0.5);
+    border-radius: 12px;
+    border: 1px solid rgba(240, 224, 0, 0.1);
+}
+
+.pedido-item-image {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid rgba(240, 224, 0, 0.2);
+}
+
+.pedido-item-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.pedido-item-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #f5f5f5;
+    margin: 0;
+}
+
+.pedido-item-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.pedido-item-quantity {
+    font-size: 0.9rem;
+    color: #c8c8c8;
+}
+
+.pedido-item-price {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #f0e000;
+}
+
+.pedido-footer {
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(240, 224, 0, 0.2);
+}
+
+.pedido-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.3rem;
+    font-weight: 700;
+}
+
+.pedido-total-label {
+    color: #e8e8e8;
+}
+
+.pedido-total-value {
+    color: #f0e000;
+    font-size: 1.5rem;
+}
+
+/* --- ESTADO VAZIO --- */
+.pedidos-empty-container {
+    width: 100%;
+    background: linear-gradient(135deg, #0f1114 0%, #1a1d21 50%, #0f1114 100%);
+    min-height: calc(100vh - 140px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.pedidos-empty-content {
+    text-align: center;
+    padding: 3rem 2rem;
+    background: linear-gradient(135deg, #1e2125 0%, #25282d 100%);
+    border-radius: 16px;
+    border: 1px solid rgba(240, 224, 0, 0.2);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    max-width: 500px;
+}
+
+.pedidos-empty-icon {
+    font-size: 5rem;
+    color: #f0e000;
+    margin-bottom: 1.5rem;
+}
+
+.pedidos-empty-title {
+    font-size: 2rem;
+    font-weight: 900;
+    color: #f0e000;
+    margin: 0 0 1rem 0;
+}
+
+.pedidos-empty-text {
+    font-size: 1.1rem;
+    color: #d0d0d0;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+}
+
+.pedidos-empty-button {
+    display: inline-block;
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    background: linear-gradient(135deg, #c4b000 0%, #d4c000 30%, #f0e000 70%, #d4c000 100%);
+    color: #1a1d21;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.3s ease, background 0.3s ease;
+    text-decoration: none;
+}
+
+.pedidos-empty-button:hover {
+    background: linear-gradient(135deg, #f0e000 0%, #d4c000 30%, #c4b000 70%, #d4c000 100%);
+    transform: translateY(-2px);
+    color: #0f1114;
+}
+
+/* --- RESPONSIVIDADE --- */
+@media (max-width: 768px) {
+    .pedidos-container {
+        padding: 1.5rem 1rem;
+    }
+
+    .pedidos-title {
+        font-size: 2rem;
+    }
+
+    .pedido-card {
+        padding: 1.5rem;
+    }
+
+    .pedido-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .pedido-status-badge {
+        align-self: flex-start;
+    }
+
+    .pedido-item {
+        flex-direction: column;
+    }
+
+    .pedido-item-image {
+        width: 100%;
+        height: 200px;
+    }
+
+    .pedido-item-info {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+@media (max-width: 480px) {
+    .pedidos-container {
+        padding: 1rem;
+    }
+
+    .pedidos-title {
+        font-size: 1.75rem;
+    }
+
+    .pedido-card {
+        padding: 1.25rem;
+    }
+
+    .pedido-id {
+        font-size: 1.1rem;
+    }
+
+    .pedido-total {
+        font-size: 1.1rem;
+    }
+
+    .pedido-total-value {
+        font-size: 1.3rem;
+    }
+}
+

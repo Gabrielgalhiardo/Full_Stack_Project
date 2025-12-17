@@ -6,7 +6,6 @@
     padding: 30px 20px;
     color: #f0f0f0;
     min-height: calc(100vh - 140px);
-    padding-top: 160px;
 }
 
 .admin-cadastro-header {
@@ -123,7 +122,6 @@
     justify-content: flex-end;
     gap: 15px;
     margin-top: 20px;
-    padding-top: 20px;
     border-top: 1px solid #3a3f44;
 }
 
@@ -173,7 +171,6 @@
 @media (max-width: 768px) {
     .admin-cadastro-container {
         padding: 20px 15px;
-        padding-top: 150px;
     }
 
     .admin-cadastro-header {

@@ -1,0 +1,62 @@
+/* src/responsiveGrid/ResponsiveGrid.css */
+
+.responsive-grid-container {
+    width: 100%;
+    background: transparent;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    min-height: calc(100vh - 300px);
+    box-sizing: border-box;
+}
+
+.responsive-grid-title {
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: #f0e000;
+    margin: 0 0 2rem 0;
+    text-align: center;
+}
+
+.responsive-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2rem;
+    width: 100%;
+}
+
+/* --- RESPONSIVIDADE --- */
+@media (max-width: 768px) {
+    .responsive-grid-container {
+        padding: 1.5rem;
+        min-height: calc(100vh - 200px);
+    }
+
+    .responsive-grid-title {
+        font-size: 2rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .responsive-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .responsive-grid-container {
+        padding: 1rem;
+    }
+
+    .responsive-grid-title {
+        font-size: 1.75rem;
+        margin-bottom: 1rem;
+    }
+
+    .responsive-grid {
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
+    }
+}
+

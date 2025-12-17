@@ -1,22 +1,18 @@
 import * as React from 'react';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import CardActionArea from '@mui/material/CardActionArea';
-import CardActions from '@mui/material/CardActions';
-import Box from '@mui/material/Box';
-import { ClickAwayListener, Portal } from '@mui/material';
-
+import { FaShoppingCart } from 'react-icons/fa';
 import './MultiActionAreaCard.css';
+import { useCart } from '../../contexts/CartContext';
 
 export default function MultiActionAreaCard(props) {
     const [openModalDetalhes, setOpenModalDetalhes] = React.useState(false);
     const [openModalCarrinho, setOpenModalCarrinho] = React.useState(false);
+    const { addToCart } = useCart();
 
     const handleAbrirDetalhes = () => setOpenModalDetalhes(true);
-    const handleAbrirCarrinho = () => setOpenModalCarrinho(true);
+    const handleAbrirCarrinho = () => {
+        addToCart(props.product);
+        setOpenModalCarrinho(true);
+    };
 
     const handleFecharModais = () => {
         setOpenModalDetalhes(false);
@@ -24,77 +20,97 @@ export default function MultiActionAreaCard(props) {
     };
     
     return (
-        <ClickAwayListener onClickAway={handleFecharModais}>
-            <div>
-                <Card sx={{
-                    maxWidth: 455,
-                    backgroundColor: '#2d3237ff',
-                    color: 'white',
-                    height: '450px',
-                    display: 'flex',
-                    flexDirection: 'column'
-                }}>
-                    <CardActionArea
-                        onClick={handleAbrirDetalhes}
-                        sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}
+        <div className="product-card-wrapper">
+            <div className="product-card">
+                <div 
+                    className="product-card-image-area"
+                    onClick={handleAbrirDetalhes}
+                >
+                    <img 
+                        src={props.product.imageUrl} 
+                        alt={props.product.title} 
+                        className="product-card-image"
+                        draggable="false"
+                        onDragStart={(e) => e.preventDefault()}
+                        onContextMenu={(e) => e.preventDefault()}
+                    />
+                </div>
+                <div className="product-card-content">
+                    <h3 className="product-card-title" onClick={handleAbrirDetalhes}>
+                        {props.product.title}
+                    </h3>
+                    <p className="product-card-description">
+                        {props.product.description}
+                    </p>
+                </div>
+                <div className="product-card-footer">
+                    <span className="product-card-price">
+                        R$ {props.product.price.toFixed(2).replace('.', ',')}
+                    </span>
+                    <button 
+                        className="product-card-button"
+                        onClick={handleAbrirCarrinho}
                     >
-                        <CardMedia component="img" height="200" image={props.product.imageUrl} alt={props.product.title} />
-                        <CardContent sx={{ flexGrow: 1 }}>
-                            <Typography gutterBottom variant="h5" component="div">{props.product.title}</Typography>
-                            <Typography variant="body2" sx={{ color: '#b5b5b5ff' }}>{props.product.description}</Typography>
-                        </CardContent>
-                    </CardActionArea>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', p: 2 }}>
-                        <Typography variant="h6">R$ {props.product.price.toFixed(2).replace('.', ',')}</Typography>
-                        <CardActions>
-                            <Button size="small" variant="contained" color="primary" onClick={handleAbrirCarrinho}>Comprar</Button>
-                        </CardActions>
-                    </Box>
-                </Card>
-
-                {/* MODAL 1: Detalhes do Produto */}
-                {openModalDetalhes && (
-                    <Portal>
-                        <Box className="modal-detalhes">
-                            <Typography variant="h4" component="h2">{props.product.title}</Typography>
-                            <img src={props.product.imageUrl} alt={props.product.title} className="modal-detalhes-imagem" />
-                            <Typography sx={{ mt: 2 }}>{props.product.description}</Typography>
-                            
-                            <Box sx={{ mt: 3, display: 'flex', flexDirection: 'column', gap: 2 }}>
-                                <Typography variant="h5">
-                                    Preço: R$ {props.product.price.toFixed(2).replace('.', ',')}
-                                </Typography>
-                                
-                                {props.product.collaboratorName && (
-                                    <Typography variant="body1" sx={{ color: '#b5b5b5' }}>
-                                        <strong>Vendedor:</strong> {props.product.collaboratorName}
-                                    </Typography>
-                                )}
-                                
-                                {props.product.quantity !== undefined && (
-                                    <Typography variant="body1" sx={{ color: '#b5b5b5' }}>
-                                        <strong>Unidades disponíveis:</strong> {props.product.quantity}
-                                    </Typography>
-                                )}
-                            </Box>
-                            
-                            <Button variant="contained" sx={{ mt: 3 }} onClick={handleFecharModais}>Fechar</Button>
-                        </Box>
-                    </Portal>
-                )}
-
-                {openModalCarrinho && (
-                    <Portal>
-                        <Box className="modal-carrinho">
-                            <Typography variant="h6" component="h2">Produto Adicionado!</Typography>
-                            <Typography sx={{ mt: 2 }}>
-                                Você adicionou "{props.product.title}" ao seu carrinho.
-                            </Typography>
-                            <Button sx={{ mt: 2 }} onClick={handleFecharModais}>OK</Button>
-                        </Box>
-                    </Portal>
-                )}
+                        <FaShoppingCart /> Comprar
+                    </button>
+                </div>
             </div>
-        </ClickAwayListener>
+
+            {/* MODAL: Detalhes do Produto */}
+            {openModalDetalhes && (
+                <div className="modal-overlay-product" onClick={handleFecharModais}>
+                    <div className="modal-content-product" onClick={(e) => e.stopPropagation()}>
+                        <button className="modal-close-product" onClick={handleFecharModais}>×</button>
+                        <h2 className="modal-title-product">{props.product.title}</h2>
+                        <img 
+                            src={props.product.imageUrl} 
+                            alt={props.product.title} 
+                            className="modal-image-product"
+                            draggable="false"
+                            onDragStart={(e) => e.preventDefault()}
+                            onContextMenu={(e) => e.preventDefault()}
+                        />
+                        <p className="modal-description-product">{props.product.description}</p>
+                        
+                        <div className="modal-details-product">
+                            <div className="modal-detail-row">
+                                <strong>Preço:</strong>
+                                <span className="modal-price-product">R$ {props.product.price.toFixed(2).replace('.', ',')}</span>
+                            </div>
+                            
+                            {props.product.collaboratorName && (
+                                <div className="modal-detail-row">
+                                    <strong>Vendedor:</strong>
+                                    <span>{props.product.collaboratorName}</span>
+                                </div>
+                            )}
+                            
+                            {props.product.quantity !== undefined && (
+                                <div className="modal-detail-row">
+                                    <strong>Unidades disponíveis:</strong>
+                                    <span>{props.product.quantity}</span>
+                                </div>
+                            )}
+                        </div>
+                        
+                        <button className="modal-button-product" onClick={handleFecharModais}>Fechar</button>
+                    </div>
+                </div>
+            )}
+
+            {/* MODAL: Produto Adicionado ao Carrinho */}
+            {openModalCarrinho && (
+                <div className="modal-overlay-product" onClick={handleFecharModais}>
+                    <div className="modal-content-product modal-cart-product" onClick={(e) => e.stopPropagation()}>
+                        <button className="modal-close-product" onClick={handleFecharModais}>×</button>
+                        <h2 className="modal-title-product">Produto Adicionado!</h2>
+                        <p className="modal-message-product">
+                            Você adicionou "{props.product.title}" ao seu carrinho.
+                        </p>
+                        <button className="modal-button-product" onClick={handleFecharModais}>OK</button>
+                    </div>
+                </div>
+            )}
+        </div>
     );
 }

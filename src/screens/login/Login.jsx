@@ -1,16 +1,17 @@
-// src/screens/login/Login.js
 
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Login.css';
 import { api } from '../../services/api';
 import { saveToken, isAuthenticated } from '../../services/authService';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
 
     // Redireciona para /home se já estiver autenticado
@@ -51,18 +52,12 @@ function Login() {
     };
 
     return (
-        <div className="login-container">
-            <h2>Login</h2>
+        <div className="login-page-wrapper">
+            <div className="login-container">
+                <h2>Login</h2>
 
             {error && (
-                <div style={{ 
-                    color: 'red', 
-                    marginBottom: '15px', 
-                    padding: '10px', 
-                    backgroundColor: '#ffebee', 
-                    borderRadius: '5px',
-                    textAlign: 'center'
-                }}>
+                <div className="error-message">
                     {error}
                 </div>
             )}
@@ -83,15 +78,25 @@ function Login() {
 
                 <div className='input-group'>
                     <label htmlFor="password">Senha</label>
-                    <input 
-                        type="password" 
-                        id="password" 
-                        placeholder="Senha"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                        disabled={loading}
-                    />
+                    <div className="password-input-wrapper">
+                        <input 
+                            type={showPassword ? "text" : "password"} 
+                            id="password" 
+                            placeholder="Senha"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                            disabled={loading}
+                        />
+                        <button
+                            type="button"
+                            className="password-toggle"
+                            onClick={() => setShowPassword(!showPassword)}
+                            disabled={loading}
+                        >
+                            {showPassword ? <FaEyeSlash /> : <FaEye />}
+                        </button>
+                    </div>
                 </div>
 
                 <button
@@ -107,6 +112,7 @@ function Login() {
                 Não tem uma conta? <Link to="/cadastro">Cadastre-se</Link>
             </p>
             
+            </div>
         </div>
     );
 }

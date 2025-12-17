@@ -1,0 +1,586 @@
+/* src/screens/sobre/Sobre.css */
+
+/* Reset de estilos para elementos HTML */
+.sobre-content h2,
+.sobre-content h3,
+.sobre-content p {
+    margin: 0;
+    padding: 0;
+}
+
+.sobre-container {
+    background: linear-gradient(135deg, #0f1114 0%, #1a1d21 50%, #0f1114 100%);
+    color: #e8e8e8;
+    padding: 4rem 0;
+    width: 100%;
+    min-height: calc(100vh - 140px);
+    display: flex;
+    justify-content: center;
+}
+
+.sobre-content {
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 2rem;
+    box-sizing: border-box;
+}
+
+/* --- SEÇÃO HERO --- */
+.sobre-hero {
+    text-align: center;
+    margin-bottom: 6rem;
+    padding: 2rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    align-items: center;
+    justify-content: center;
+}
+
+.sobre-hero-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 0 0 2.5rem 0;
+    color: #f0e000;
+    line-height: 1.4;
+}
+
+.sobre-hero-text {
+    color: #d0d0d0;
+    max-width: 750px;
+    margin: 2rem auto 0;
+    font-size: 1.3rem;
+    line-height: 2;
+    font-weight: 400;
+    text-align: center;
+    
+}
+
+/* --- SEÇÃO HISTÓRIA --- */
+.sobre-historia {
+    margin-bottom: 6rem;
+}
+
+.sobre-historia-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: center;
+}
+
+.sobre-historia-text-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.sobre-historia-title {
+    font-size: 2rem;
+    font-weight: 900;
+    margin: 0 0 2.5rem 0;
+    color: #f0e000;
+}
+
+.sobre-historia-text {
+    color: #d4d4d4;
+    line-height: 2;
+    margin-bottom: 0;
+    margin-top: 0;
+    font-size: 1.2rem;
+    font-weight: 400;
+}
+
+.sobre-historia-image-wrapper {
+    width: 100%;
+}
+
+.sobre-historia-image {
+    width: 100%;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(103, 93, 0, 0.3);
+    transition: transform 0.3s ease;
+    display: block;
+}
+
+.sobre-historia-image:hover {
+    transform: translateY(-5px);
+}
+
+/* --- SEÇÃO VALORES --- */
+.sobre-valores {
+    text-align: center;
+    margin-bottom: 6rem;
+}
+
+.sobre-valores-title {
+    font-size: 2rem;
+    font-weight: 900;
+    margin: 0 0 4rem 0;
+    color: #f0e000;
+}
+
+.sobre-valores-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.sobre-valor-card-wrapper {
+    width: 100%;
+}
+
+.sobre-valor-card {
+    padding: 2.5rem 2rem;
+    margin-top: 1rem;
+    background: linear-gradient(135deg, #1e2125 0%, #25282d 100%);
+    border-radius: 16px;
+    text-align: center;
+    height: 100%;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+    border: 1px solid rgba(139, 122, 0, 0.25);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.sobre-valor-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 16px 40px rgba(139, 122, 0, 0.5);
+    border-color: rgba(184, 160, 0, 0.6);
+    background: linear-gradient(135deg, #25282d 0%, #2a2d32 100%);
+}
+
+.sobre-valor-icon {
+    font-size: 3rem;
+    color: #b8a000;
+    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: center;
+    filter: drop-shadow(0 2px 8px rgba(184, 160, 0, 0.4));
+}
+
+.sobre-valor-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 1.5rem 0;
+    color: #f5f5f5;
+}
+
+.sobre-valor-description {
+    color: #e0e0e0;
+    line-height: 1.9;
+    font-size: 1.05rem;
+    font-weight: 400;
+    margin: 0;
+    margin-top: 0.5rem;
+}
+
+/* --- SEÇÃO BENEFÍCIOS --- */
+.sobre-beneficios {
+    text-align: center;
+    margin-bottom: 6rem;
+}
+
+.sobre-beneficios-title {
+    font-size: 2rem;
+    font-weight: 900;
+    margin: 0 0 4rem 0;
+    color: #f0e000;
+}
+
+.sobre-beneficios-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.sobre-beneficio-card-wrapper {
+    width: 100%;
+}
+
+.sobre-beneficio-card {
+    padding: 2.5rem 2rem;
+    margin-top: 1rem;
+    background: linear-gradient(135deg, #1e2125 0%, #25282d 100%);
+    border-radius: 16px;
+    text-align: center;
+    height: 100%;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+    border: 1px solid rgba(139, 122, 0, 0.25);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.sobre-beneficio-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 16px 40px rgba(139, 122, 0, 0.5);
+    border-color: rgba(184, 160, 0, 0.6);
+    background: linear-gradient(135deg, #25282d 0%, #2a2d32 100%);
+}
+
+.sobre-beneficio-icon {
+    font-size: 3rem;
+    color: #b8a000;
+    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: center;
+    filter: drop-shadow(0 2px 8px rgba(184, 160, 0, 0.4));
+}
+
+.sobre-beneficio-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 1.5rem 0;
+    color: #f5f5f5;
+}
+
+.sobre-beneficio-description {
+    color: #e0e0e0;
+    line-height: 1.9;
+    font-size: 1.05rem;
+    font-weight: 400;
+    margin: 0;
+    margin-top: 0.5rem;
+}
+
+/* --- SEÇÃO EQUIPE --- */
+.sobre-equipe {
+    text-align: center;
+    margin-bottom: 6rem;
+}
+
+.sobre-equipe-title {
+    font-size: 2rem;
+    font-weight: 900;
+    margin: 0 0 2rem 0;
+    color: #f0e000;
+}
+
+.sobre-equipe-subtitle {
+    color: #d0d0d0;
+    margin: 0 0 3.5rem 0;
+    font-size: 1.2rem;
+    font-weight: 400;
+    line-height: 1.8;
+}
+
+.sobre-equipe-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    justify-items: center;
+}
+
+.sobre-equipe-member-wrapper {
+    width: 100%;
+    max-width: 300px;
+}
+
+.sobre-equipe-member {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 250px;
+    padding: 2.5rem 2rem;
+    margin-top: 1rem;
+    background: linear-gradient(135deg, #1e2125 0%, #25282d 100%);
+    border-radius: 16px;
+    border: 1px solid rgba(139, 122, 0, 0.25);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.sobre-equipe-member:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 16px 40px rgba(139, 122, 0, 0.5);
+    border-color: rgba(184, 160, 0, 0.6);
+    background: linear-gradient(135deg, #25282d 0%, #2a2d32 100%);
+}
+
+.sobre-equipe-avatar {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 1.5rem;
+    border: 3px solid #b8a000;
+    box-shadow: 0 4px 15px rgba(184, 160, 0, 0.3);
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+}
+
+.sobre-equipe-name {
+    font-size: 1.25rem;
+    margin: 1.5rem 0 0.75rem 0;
+    color: #f5f5f5;
+    font-weight: 600;
+}
+
+.sobre-equipe-role {
+    color: #b8a000;
+    font-weight: 500;
+    margin: 0;
+    margin-top: 0.5rem;
+}
+
+/* --- SEÇÃO CTA --- */
+.sobre-cta {
+    padding: 4rem 3rem;
+    text-align: center;
+    background: linear-gradient(135deg, #1e2125 0%, #25282d 100%);
+    color: #e8e8e8;
+    border-radius: 22px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(139, 122, 0, 0.3);
+}
+
+.sobre-cta-title {
+    font-size: 2rem;
+    font-weight: 900;
+    margin: 0 0 2rem 0;
+    color: #f0e000;
+}
+
+.sobre-cta-text {
+    color: #d0d0d0;
+    margin: 1.5rem 0 2.5rem 0;
+    font-size: 1.25rem;
+    line-height: 2;
+    font-weight: 400;
+}
+
+.sobre-cta-button {
+    display: inline-block;
+    padding: 0.875rem 2.5rem;
+    margin-top: 1.5rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    background: linear-gradient(135deg, #c4b000 0%, #d4c000 30%, #f0e000 70%, #d4c000 100%);
+    color: #1a1d21;
+    border: none;
+    border-radius: 8px;
+    transition: transform 0.3s ease, background 0.3s ease;
+    box-shadow: none;
+    text-shadow: none;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.sobre-cta-button:hover {
+    background: linear-gradient(135deg, #f0e000 0%, #d4c000 30%, #c4b000 70%, #d4c000 100%);
+    transform: translateY(-2px);
+    box-shadow: none;
+    color: #0f1114;
+}
+
+/* --- RESPONSIVIDADE --- */
+@media (max-width: 768px) {
+    .sobre-container {
+        padding: 2rem 1rem;
+        min-height: calc(100vh - 70px);
+    }
+
+    .sobre-content {
+        padding: 0 1rem;
+    }
+
+    .sobre-hero {
+        margin-bottom: 4rem;
+    }
+
+    .sobre-hero-title {
+        font-size: 1.75rem;
+    }
+
+    .sobre-historia-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .sobre-historia-title {
+        font-size: 1.5rem;
+    }
+
+    .sobre-valores-grid,
+    .sobre-beneficios-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .sobre-hero-text {
+        font-size: 0.95rem;
+    }
+
+    .sobre-historia {
+        margin-bottom: 4rem;
+    }
+
+    .sobre-historia-title {
+        font-size: 1.5rem;
+    }
+
+    .sobre-valores {
+        margin-bottom: 4rem;
+    }
+
+    .sobre-valores-title {
+        font-size: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .sobre-valor-card {
+        padding: 1.5rem 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .sobre-valor-icon {
+        font-size: 2.5rem;
+    }
+
+    .sobre-beneficios {
+        margin-bottom: 4rem;
+    }
+
+    .sobre-beneficios-title {
+        font-size: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .sobre-beneficio-card {
+        padding: 1.5rem 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .sobre-beneficio-icon {
+        font-size: 2.5rem;
+    }
+
+    .sobre-equipe {
+        margin-bottom: 4rem;
+    }
+
+    .sobre-equipe-title {
+        font-size: 1.5rem;
+    }
+
+    .sobre-equipe-subtitle {
+        font-size: 0.95rem;
+    }
+
+    .sobre-equipe-grid {
+        gap: 1.5rem;
+    }
+
+    .sobre-cta {
+        padding: 2rem 1.5rem;
+    }
+
+    .sobre-cta-title {
+        font-size: 1.25rem;
+    }
+
+    .sobre-cta-text {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .sobre-container {
+        padding: 1.5rem 0.75rem;
+    }
+
+    .sobre-hero {
+        margin-bottom: 3rem;
+    }
+
+    .sobre-hero-title {
+        font-size: 1.5rem;
+    }
+
+    .sobre-hero-text {
+        font-size: 0.85rem;
+    }
+
+    .sobre-historia {
+        margin-bottom: 3rem;
+    }
+
+    .sobre-historia-title {
+        font-size: 1.25rem;
+    }
+
+    .sobre-historia-text {
+        font-size: 0.9rem;
+    }
+
+    .sobre-valores {
+        margin-bottom: 3rem;
+    }
+
+    .sobre-valores-title {
+        font-size: 1.25rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .sobre-valor-card {
+        padding: 1.25rem 0.75rem;
+    }
+
+    .sobre-valor-icon {
+        font-size: 2rem;
+    }
+
+    .sobre-beneficios {
+        margin-bottom: 3rem;
+    }
+
+    .sobre-beneficios-title {
+        font-size: 1.25rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .sobre-beneficio-card {
+        padding: 1.25rem 0.75rem;
+    }
+
+    .sobre-beneficio-icon {
+        font-size: 2rem;
+    }
+
+    .sobre-equipe {
+        margin-bottom: 3rem;
+    }
+
+    .sobre-equipe-title {
+        font-size: 1.25rem;
+    }
+
+    .sobre-equipe-subtitle {
+        font-size: 0.85rem;
+    }
+
+    .sobre-equipe-avatar {
+        width: 100px;
+        height: 100px;
+    }
+
+    .sobre-cta {
+        padding: 1.5rem 1rem;
+    }
+
+    .sobre-cta-title {
+        font-size: 1.1rem;
+    }
+
+    .sobre-cta-text {
+        font-size: 0.9rem;
+    }
+
+    .sobre-cta-button {
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+    }
+}
+

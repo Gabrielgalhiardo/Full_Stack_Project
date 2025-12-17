@@ -224,7 +224,7 @@ function ProductForm({ product, isEditing, onSubmit, onCancel }) {
                     />
                     {imagePreview && (
                         <div className="image-preview-wrapper">
-                            <img src={imagePreview} alt="Preview" className="image-preview" />
+                            <img src={imagePreview} alt="Preview" className="image-preview" draggable="false" onDragStart={(e) => e.preventDefault()} onContextMenu={(e) => e.preventDefault()} />
                             <button 
                                 type="button"
                                 onClick={() => {

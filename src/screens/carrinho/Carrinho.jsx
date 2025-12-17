@@ -1,36 +1,36 @@
-// Arquivo: /src/pages/Carrinho/ShoppingCartPage.js (ou onde preferir)
+// Arquivo: /src/screens/carrinho/Carrinho.jsx
 
-import React, { useState, useMemo } from 'react';
-import { Box, Container, Typography, Grid, Paper, Button, IconButton, Divider } from '@mui/material';
-import { FaTrash, FaShoppingCart } from 'react-icons/fa';
-import { Link as RouterLink } from 'react-router-dom'; // Para o link de "Continuar comprando"
-
-// --- DADOS FICTÍCIOS (MOCK) ---
-// Em uma aplicação real, estes dados viriam de um Context, Redux, ou estado global.
-const mockItems = [
-    {
-        id: 1,
-        title: "Smartphone X Pro",
-        price: 4999.99,
-        imageUrl: "https://picsum.photos/200/?1",
-        quantity: 1,
-    },
-    {
-        id: 2,
-        title: "A Sutil Arte de Ligar o F*da-se",
-        price: 34.90,
-        imageUrl: "https://picsum.photos/200/?2",
-        quantity: 2,
-    },
-];
-// ------------------------------------
+import React, { useMemo } from 'react';
+import { FaTrash, FaShoppingCart, FaPlus, FaMinus } from 'react-icons/fa';
+import { Link, useNavigate } from 'react-router-dom';
+import './Carrinho.css';
+import { useCart } from '../../contexts/CartContext';
+import { useOrder } from '../../contexts/OrderContext';
 
 export default function Carrinho() {
-    const [cartItems, setCartItems] = useState(mockItems);
+    const { cartItems, removeFromCart, updateQuantity, clearCart } = useCart();
+    const { createOrder } = useOrder();
+    const navigate = useNavigate();
 
     // Função para remover um item do carrinho
     const handleRemoveItem = (itemId) => {
-        setCartItems(currentItems => currentItems.filter(item => item.id !== itemId));
+        removeFromCart(itemId);
+    };
+
+    // Função para aumentar a quantidade
+    const handleIncreaseQuantity = (itemId) => {
+        const item = cartItems.find(i => i.id === itemId);
+        if (item) {
+            updateQuantity(itemId, item.quantity + 1);
+        }
+    };
+
+    // Função para diminuir a quantidade
+    const handleDecreaseQuantity = (itemId) => {
+        const item = cartItems.find(i => i.id === itemId);
+        if (item && item.quantity > 1) {
+            updateQuantity(itemId, item.quantity - 1);
+        }
     };
 
     // Calcula o total usando useMemo para otimização
@@ -41,90 +41,135 @@ export default function Carrinho() {
     // Se o carrinho estiver vazio
     if (cartItems.length === 0) {
         return (
-            <Box sx={{ backgroundColor: '#1e1e1e', color: 'white', py: 8, textAlign: 'center', minHeight: 'calc(100vh - 70px)', width: '70dvw', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Container maxWidth="sm">
-                    <FaShoppingCart style={{ fontSize: '4rem', color: '#675d00' }} />
-                    <Typography variant="h4" component="h1" gutterBottom sx={{ mt: 3, fontWeight: 'bold' }}>
+            <div className="carrinho-empty-container">
+                <div className="carrinho-empty-content">
+                    <FaShoppingCart className="carrinho-empty-icon" />
+                    <h1 className="carrinho-empty-title">
                         Seu carrinho está vazio
-                    </Typography>
-                    <Typography color="#b5b5b5ff" sx={{ mb: 4 }}>
+                    </h1>
+                    <p className="carrinho-empty-text">
                         Adicione produtos para vê-los aqui.
-                    </Typography>
-                    <Button component={RouterLink} to="/home" variant="contained" color="primary">
+                    </p>
+                    <Link to="/home" className="carrinho-empty-button">
                         Continuar Comprando
-                    </Button>
-                </Container>
-            </Box>
+                    </Link>
+                </div>
+            </div>
         );
     }
 
     return (
-        <Box sx={{ backgroundColor: '#1e1e1e', color: 'white', py: 2, minHeight: 'calc(100vh - 70px)', width: '70dvw', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Container maxWidth="lg" sx={{ display: 'flex', flexDirection: 'column', gap: 4, justifyContent: 'center', alignItems: 'center' }}>
-                <Typography variant="h3" component="h1" gutterBottom sx={{ fontWeight: 'bold', mb: 4 }}>
+        <div className="carrinho-container">
+            <div className="carrinho-content">
+                <h1 className="carrinho-title">
                     Meu Carrinho
-                </Typography>
+                </h1>
 
-                <Grid container spacing={4}>
+                <div className="carrinho-grid">
                     {/* --- COLUNA ESQUERDA: ITENS DO CARRINHO --- */}
-                    <Grid item xs={12} md={8}>
+                    <div className="carrinho-items-column">
                         {cartItems.map((item) => (
-                            <Paper key={item.id} elevation={2} sx={{ backgroundColor: '#2d3237ff', color: 'white', p: 2, mb: 2, display: 'flex', alignItems: 'center', borderRadius: '15px' }}>
-                                <Box component="img" src={item.imageUrl} alt={item.title} sx={{ width: 100, height: 100, objectFit: 'cover', borderRadius: '10px', mr: 2 }} />
+                            <div key={item.id} className="carrinho-item">
+                                <img 
+                                    src={item.imageUrl} 
+                                    alt={item.title} 
+                                    className="carrinho-item-image"
+                                    draggable="false"
+                                    onDragStart={(e) => e.preventDefault()}
+                                    onContextMenu={(e) => e.preventDefault()}
+                                />
                                 
-                                <Box sx={{ flexGrow: 1 }}>
-                                    <Typography variant="h6">{item.title}</Typography>
-                                    <Typography color="#b5b5b5ff">Quantidade: {item.quantity}</Typography>
-                                </Box>
+                                <div className="carrinho-item-content">
+                                    <h3 className="carrinho-item-title">
+                                        {item.title}
+                                    </h3>
+                                    <div className="carrinho-item-quantity-control">
+                                        <span className="carrinho-quantity-label">Quantidade:</span>
+                                        <div className="carrinho-quantity-buttons">
+                                            <button
+                                                className="carrinho-quantity-btn"
+                                                onClick={() => handleDecreaseQuantity(item.id)}
+                                                disabled={item.quantity <= 1}
+                                                title="Diminuir quantidade"
+                                            >
+                                                <FaMinus />
+                                            </button>
+                                            <span className="carrinho-quantity-value">{item.quantity}</span>
+                                            <button
+                                                className="carrinho-quantity-btn"
+                                                onClick={() => handleIncreaseQuantity(item.id)}
+                                                title="Aumentar quantidade"
+                                            >
+                                                <FaPlus />
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
                                 
-                                <Box sx={{ textAlign: 'right' }}>
-                                    <Typography variant="h6">R$ {(item.price * item.quantity).toFixed(2).replace('.', ',')}</Typography>
-                                    <IconButton onClick={() => handleRemoveItem(item.id)} sx={{ color: '#b5b5b5ff', '&:hover': { color: '#e63946' } }}>
+                                <div className="carrinho-item-actions">
+                                    <div className="carrinho-item-prices">
+                                        <span className="carrinho-item-price-unit">
+                                            R$ {item.price.toFixed(2).replace('.', ',')} (unidade)
+                                        </span>
+                                        <span className="carrinho-item-price-total">
+                                            R$ {(item.price * item.quantity).toFixed(2).replace('.', ',')}
+                                        </span>
+                                    </div>
+                                    <button 
+                                        onClick={() => handleRemoveItem(item.id)} 
+                                        className="carrinho-item-remove-btn"
+                                        title="Remover item"
+                                    >
                                         <FaTrash />
-                                    </IconButton>
-                                </Box>
-                            </Paper>
+                                    </button>
+                                </div>
+                            </div>
                         ))}
-                    </Grid>
+                    </div>
 
                     {/* --- COLUNA DIREITA: RESUMO DO PEDIDO --- */}
-                    <Grid item xs={12} md={4}>
-                        <Paper elevation={3} sx={{ backgroundColor: '#2d3237ff', color: 'white', padding: 3, borderRadius: '15px', position: 'sticky', top: '100px' /* Header height + margin */ }}>
-                            <Typography variant="h5" component="h2" gutterBottom sx={{ fontWeight: 'bold' }}>
+                    <div className="carrinho-resumo-column">
+                        <div className="carrinho-resumo">
+                            <h2 className="carrinho-resumo-title">
                                 Resumo do Pedido
-                            </Typography>
-                            <Divider sx={{ my: 2, borderColor: '#444' }} />
+                            </h2>
+                            <div className="carrinho-resumo-divider"></div>
                             
-                            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-                                <Typography color="#b5b5b5ff">Subtotal ({cartItems.length} itens)</Typography>
-                                <Typography>R$ {total.toFixed(2).replace('.', ',')}</Typography>
-                            </Box>
+                            <div className="carrinho-resumo-row">
+                                <span className="carrinho-resumo-label">
+                                    Subtotal ({cartItems.length} itens)
+                                </span>
+                                <span>R$ {total.toFixed(2).replace('.', ',')}</span>
+                            </div>
                             
-                            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
-                                <Typography color="#b5b5b5ff">Frete</Typography>
-                                <Typography>GRÁTIS</Typography>
-                            </Box>
+                            <div className="carrinho-resumo-row">
+                                <span className="carrinho-resumo-label">Frete</span>
+                                <span className="carrinho-resumo-frete">GRÁTIS</span>
+                            </div>
 
-                            <Divider sx={{ my: 2, borderColor: '#444' }} />
+                            <div className="carrinho-resumo-divider"></div>
 
-                            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
-                                <Typography variant="h6" sx={{ fontWeight: 'bold' }}>Total</Typography>
-                                <Typography variant="h6" sx={{ fontWeight: 'bold' }}>R$ {total.toFixed(2).replace('.', ',')}</Typography>
-                            </Box>
+                            <div className="carrinho-resumo-total">
+                                <span>Total</span>
+                                <span>R$ {total.toFixed(2).replace('.', ',')}</span>
+                            </div>
 
-                            <Button 
-                                variant="contained" 
-                                color="primary" 
-                                fullWidth 
-                                size="large"
-                                onClick={() => alert('Indo para o pagamento!')}
+                            <button 
+                                className="carrinho-resumo-button"
+                                onClick={() => {
+                                    if (cartItems.length > 0) {
+                                        createOrder(cartItems, total);
+                                        clearCart();
+                                        navigate('/pedidos');
+                                    }
+                                }}
                             >
                                 Finalizar Compra
-                            </Button>
-                        </Paper>
-                    </Grid>
-                </Grid>
-            </Container>
-        </Box>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     );
 }

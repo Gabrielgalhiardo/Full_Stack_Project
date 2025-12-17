@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { FaShoppingCart, FaSignOutAlt } from 'react-icons/fa';
+import { FaShoppingCart, FaSignOutAlt, FaTimes } from 'react-icons/fa';
 import './ComponentHeaderGabriel.css';
 import { isAuthenticated, removeToken, isAdmin, hasAnyRole } from '../../services/authService';
+import { useCart } from '../../contexts/CartContext';
 
 function ComponentHeaderGabriel() {
     const [menuAberto, setMenuAberto] = useState(false);
@@ -10,6 +11,9 @@ function ComponentHeaderGabriel() {
     const authenticated = isAuthenticated();
     const admin = isAdmin();
     const canAccessProfile = hasAnyRole('COLLABORATOR', 'ADMIN');
+    
+    // Obtém a quantidade de itens no carrinho
+    const { totalItems } = useCart();
 
     const toggleMenu = () => {
         setMenuAberto(!menuAberto);
@@ -29,7 +33,7 @@ function ComponentHeaderGabriel() {
         <header className="header-container">
             <div className="logo">
                 <Link to={authenticated ? "/home" : "/login"} onClick={fecharMenu}>
-                    <img src="/img/logo.png" alt="Logo" className='imagem-logo' />
+                    <img src="/img/logo.svg" alt="Logo" className='imagem-logo' draggable="false" onDragStart={(e) => e.preventDefault()} onContextMenu={(e) => e.preventDefault()} />
                 </Link>
             </div>
 
@@ -46,12 +50,22 @@ function ComponentHeaderGabriel() {
                                     <NavLink to="/sobre" onClick={fecharMenu}>Sobre</NavLink>
                                 </li>
                                 <li>
-                                    <NavLink to="/contato" onClick={fecharMenu}>Contato</NavLink>
+                                    <NavLink to="/carrinho" onClick={fecharMenu}>
+                                        Compras
+                                    </NavLink>
+                                </li>
+                                <li>
+                                    <NavLink to="/pedidos" onClick={fecharMenu}>Pedidos</NavLink>
                                 </li>
                                 {canAccessProfile && (
-                                    <li>
-                                        <NavLink to="/perfil" onClick={fecharMenu}>Perfil</NavLink>
-                                    </li>
+                                    <>
+                                        <li>
+                                            <NavLink to="/perfil" onClick={fecharMenu}>Perfil</NavLink>
+                                        </li>
+                                        <li>
+                                            <NavLink to="/vendas" onClick={fecharMenu}>Vendas</NavLink>
+                                        </li>
+                                    </>
                                 )}
                                 {admin && (
                                     <>
@@ -69,7 +83,9 @@ function ComponentHeaderGabriel() {
                         <div className="header-actions">
                             <Link to="/carrinho" className="cart-link" onClick={fecharMenu}>
                                 <FaShoppingCart />
-                                <span className="cart-badge">3</span>
+                                {totalItems > 0 && (
+                                    <span className="cart-badge">{totalItems}</span>
+                                )}
                             </Link>
                             <button 
                                 onClick={handleLogout} 
@@ -78,6 +94,15 @@ function ComponentHeaderGabriel() {
                             >
                                 <FaSignOutAlt />
                             </button>
+                            {menuAberto && (
+                                <button 
+                                    className="header-menu-close" 
+                                    onClick={fecharMenu} 
+                                    aria-label="Fechar menu"
+                                >
+                                    <FaTimes />
+                                </button>
+                            )}
                         </div>
                     </>
                 ) : (

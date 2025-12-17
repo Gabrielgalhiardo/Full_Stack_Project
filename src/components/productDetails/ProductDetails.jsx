@@ -14,7 +14,7 @@ function ProductDetails({ product }) {
                 </div>
             </div>
             <div className="product-image">
-                <img src={product.imageUrl} alt={product.title} /> 
+                <img src={product.imageUrl} alt={product.title} draggable="false" onDragStart={(e) => e.preventDefault()} onContextMenu={(e) => e.preventDefault()} /> 
             </div>
 
 

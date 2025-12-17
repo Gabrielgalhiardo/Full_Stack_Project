@@ -84,12 +84,6 @@ function CadastroColaborador() {
                 <h1>
                     <FaUserPlus /> Cadastrar Colaborador
                 </h1>
-                <button 
-                    className="btn-voltar" 
-                    onClick={() => navigate(-1)}
-                >
-                    <FaTimes /> Voltar
-                </button>
             </div>
 
             <form onSubmit={handleSubmit} className="admin-cadastro-form">

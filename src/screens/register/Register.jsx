@@ -4,11 +4,14 @@ import { Link, useNavigate } from 'react-router-dom';
 import './Register.css';
 import { isAuthenticated } from '../../services/authService';
 import { api } from '../../services/api';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 function Register() {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     
     const [formData, setFormData] = useState({
         name: '',
@@ -50,11 +53,11 @@ function Register() {
         setLoading(true);
 
         try {
+            // Dados conforme CustomerRequestDTO do backend
             const customerData = {
                 name: formData.name,
                 email: formData.email,
-                password: formData.password,
-                role: 'USER' // Define explicitamente a role como USER
+                password: formData.password
             };
 
             console.log('📋 Customer a ser cadastrado:', customerData);
@@ -72,29 +75,38 @@ function Register() {
 
         } catch (err) {
             console.error("❌ Erro ao cadastrar customer:", err);
-            setError(err.message || 'Erro ao cadastrar. Verifique os dados e tente novamente.');
+            
+            // Mensagens de erro mais específicas baseadas no tipo de erro
+            let errorMessage = 'Erro ao cadastrar. Verifique os dados e tente novamente.';
+            
+            if (err.message) {
+                if (err.message.includes('400') || err.message.includes('inválido') || err.message.includes('já em uso')) {
+                    errorMessage = 'Dados inválidos ou e-mail já cadastrado. Verifique e tente novamente.';
+                } else if (err.message.includes('401')) {
+                    errorMessage = 'Não autenticado. Faça login primeiro.';
+                } else if (err.message.includes('403')) {
+                    errorMessage = 'Acesso negado. Você não tem permissão para criar clientes.';
+                } else {
+                    errorMessage = err.message;
+                }
+            }
+            
+            setError(errorMessage);
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <div className="register-container">
-            <h2>Criar Conta</h2>
+        <div className="register-page-wrapper">
+            <div className="register-container">
+                <h2>Criar Conta</h2>
 
-            {error && (
-                <div style={{ 
-                    color: '#ff6b6b', 
-                    marginBottom: '15px', 
-                    padding: '10px', 
-                    backgroundColor: 'rgba(255, 107, 107, 0.1)', 
-                    borderRadius: '5px',
-                    width: '100%',
-                    maxWidth: '350px'
-                }}>
-                    {error}
-                </div>
-            )}
+                {error && (
+                    <div className="error-message">
+                        {error}
+                    </div>
+                )}
 
             <form onSubmit={handleSubmit}>
                 <div className='input-group'>
@@ -126,30 +138,48 @@ function Register() {
 
                 <div className='input-group'>
                     <label htmlFor="password">Senha</label>
-                    <input 
-                        type="password" 
-                        id="password" 
-                        name="password"
-                        placeholder="Crie uma senha forte (mín. 6 caracteres)" 
-                        value={formData.password}
-                        onChange={handleInputChange}
-                        required
-                        minLength={6}
-                    />
+                    <div className="password-input-wrapper">
+                        <input 
+                            type={showPassword ? "text" : "password"} 
+                            id="password" 
+                            name="password"
+                            placeholder="Crie uma senha forte (mín. 6 caracteres)" 
+                            value={formData.password}
+                            onChange={handleInputChange}
+                            required
+                            minLength={6}
+                        />
+                        <button
+                            type="button"
+                            className="password-toggle"
+                            onClick={() => setShowPassword(!showPassword)}
+                        >
+                            {showPassword ? <FaEyeSlash /> : <FaEye />}
+                        </button>
+                    </div>
                 </div>
 
                 <div className='input-group'>
                     <label htmlFor="confirmPassword">Confirmar Senha</label>
-                    <input 
-                        type="password" 
-                        id="confirmPassword" 
-                        name="confirmPassword"
-                        placeholder="Repita a senha" 
-                        value={formData.confirmPassword}
-                        onChange={handleInputChange}
-                        required
-                        minLength={6}
-                    />
+                    <div className="password-input-wrapper">
+                        <input 
+                            type={showConfirmPassword ? "text" : "password"} 
+                            id="confirmPassword" 
+                            name="confirmPassword"
+                            placeholder="Repita a senha" 
+                            value={formData.confirmPassword}
+                            onChange={handleInputChange}
+                            required
+                            minLength={6}
+                        />
+                        <button
+                            type="button"
+                            className="password-toggle"
+                            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        >
+                            {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                        </button>
+                    </div>
                 </div>
 
                 <button 
@@ -161,10 +191,11 @@ function Register() {
                 </button>
             </form>
 
-            <p className="login-link">
-                Já tem uma conta? <Link to="/login">Faça login</Link>
-            </p>
+                <p className="login-link">
+                    Já tem uma conta? <Link to="/login">Faça login</Link>
+                </p>
 
+            </div>
         </div>
     );
 }

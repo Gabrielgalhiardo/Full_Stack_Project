@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import './Perfil.css';
 import { FaPlus, FaCog } from 'react-icons/fa';
 import { api } from '../../services/api';
+import { getUserRole } from '../../services/authService';
 import ProfileProductCard from '../../components/ProfileProductCard';
 import ProductForm from '../../components/ProductForm';
 
@@ -13,6 +14,7 @@ function Perfil() {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [userRole, setUserRole] = useState('Colaborador');
 
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [isAddEditModalOpen, setAddEditModalOpen] = useState(false);
@@ -20,7 +22,29 @@ function Perfil() {
     const [isSettingsModalOpen, setSettingsModalOpen] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
 
+    // Função para formatar o role de forma amigável
+    const formatRole = (role) => {
+        if (!role) return 'Usuário';
+        
+        // Remove prefixo ROLE_ se existir
+        const cleanRole = role.replace('ROLE_', '').toUpperCase();
+        
+        const roleMap = {
+            'ADMIN': 'Administrador',
+            'COLLABORATOR': 'Colaborador',
+            'USER': 'Usuário'
+        };
+        
+        return roleMap[cleanRole] || cleanRole;
+    };
+
     useEffect(() => {
+        // Obtém o role do usuário do token JWT
+        const role = getUserRole();
+        if (role) {
+            setUserRole(formatRole(role));
+        }
+        
         const userId = 1; // ID do usuário logado (exemplo)
         
         // Simulação de busca de usuário
@@ -178,7 +202,7 @@ function Perfil() {
                         <h1 className="perfil-nome">{user.name}</h1>
                         <p className="perfil-email">{user.email}</p>
                     </div>
-                    <span className="perfil-badge">Colaborador</span>
+                    <span className="perfil-badge">{userRole}</span>
                 </div>
                 <div className="perfil-actions">
                     <button className="action-button primary" onClick={handleOpenAddModal}>
